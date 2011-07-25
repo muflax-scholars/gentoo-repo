@@ -1,0 +1,27 @@
+Index: DOCS/man/en/mplayer.1
+===================================================================
+--- DOCS/man/en/mplayer.1	(revision 28493)
++++ DOCS/man/en/mplayer.1	(working copy)
+@@ -2294,7 +2294,7 @@
+ .
+ .TP
+ .B \-noautosub
+-Turns off automatic subtitle file loading.
++Turns off automatic subtitle loading.
+ .
+ .TP
+ .B \-osd\-duration <time>
+Index: mplayer.c
+===================================================================
+--- mplayer.c	(revision 28493)
++++ mplayer.c	(working copy)
+@@ -1869,7 +1869,8 @@
+     // finally select subs by language and container hints
+     if (dvdsub_id == -1 && dvdsub_lang)
+       dvdsub_id = demuxer_sub_track_by_lang(mpctx->demuxer, dvdsub_lang);
+-    if (dvdsub_id == -1)
++    // load default subtitle, unless the user doesn't want that
++    if (dvdsub_id == -1 && sub_auto)
+       dvdsub_id = demuxer_default_sub_track(mpctx->demuxer);
+     if (dvdsub_id >= 0)
+       mpctx->global_sub_pos = mpctx->global_sub_indices[SUB_SOURCE_DEMUX] + dvdsub_id;

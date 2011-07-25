@@ -1,0 +1,44 @@
+--- src/img-view.c	2009-01-25 19:53:32.000000000 +0100
++++ src/img-view.c	2009-03-13 07:45:00.000000000 +0100
+@@ -606,7 +606,7 @@
+ 	switch (event->button)
+ 		{
+ 		case MOUSE_BUTTON_LEFT:
+-			view_step_next(vw);
++			//view_step_next(vw);
+ 			break;
+ 		case MOUSE_BUTTON_MIDDLE:
+ 			view_step_prev(vw);
+--- src/main.c	2009-01-25 19:53:32.000000000 +0100
++++ src/main.c.new	2009-04-07 22:18:36.000000000 +0200
+@@ -82,7 +82,7 @@
+ 		}
+ 	else
+ 		{
+-		delta = 8;
++		delta = 24;
+ 		}
+ 
+ 	*x = *x * delta;
+--- src/layout_image.c	2009-05-13 21:30:37.000000000 +0200
++++ src/layout_image.c	2009-05-15 22:39:33.770726846 +0200
+@@ -1357,7 +1357,8 @@
+ 
+ 	switch (event->button)
+ 		{
+-		case MOUSE_BUTTON_LEFT:
++#if 0
++        case MOUSE_BUTTON_LEFT:
+ 			if (lw->split_mode == SPLIT_NONE)
+ 				layout_image_next(lw);
+ 			break;
+@@ -1365,7 +1366,8 @@
+ 			if (lw->split_mode == SPLIT_NONE)
+ 				layout_image_prev(lw);
+ 			break;
+-		case MOUSE_BUTTON_RIGHT:
++#endif
++        case MOUSE_BUTTON_RIGHT:
+ 			menu = layout_image_pop_menu(lw);
+ 			if (imd == lw->image)
+ 				{
