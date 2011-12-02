@@ -1,11 +1,10 @@
-diff -ur xmonad-contrib-0.9.1/XMonad/Hooks/DynamicLog.hs new/XMonad/Hooks/DynamicLog.hs
---- xmonad-contrib-0.9.1/XMonad/Hooks/DynamicLog.hs	2009-12-17 00:32:25.000000000 +0100
-+++ new/XMonad/Hooks/DynamicLog.hs	2010-08-12 09:40:11.267160695 +0200
-@@ -253,7 +253,7 @@
+--- xmonad-contrib-0.10/XMonad/Hooks/DynamicLog.hs	2011-11-19 00:26:06.000000000 +0100
++++ new/XMonad/Hooks/DynamicLog.hs	2011-12-02 04:23:11.130463658 +0100
+@@ -276,7 +276,7 @@
      -- run extra loggers, ignoring any that generate errors.
-     extras <- sequence $ map (flip catchX (return Nothing)) $ ppExtras pp
+     extras <- mapM (flip catchX (return Nothing)) $ ppExtras pp
  
--    return $ encodeOutput . sepBy (ppSep pp) . ppOrder pp $
+-    return $ encodeString . sepBy (ppSep pp) . ppOrder pp $
 +    return $ sepBy (ppSep pp) . ppOrder pp $
                          [ ws
                          , ppLayout pp ld
