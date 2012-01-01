@@ -1,30 +1,28 @@
 # Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-video/mplayer/mplayer-1.0_rc4_p20110322.ebuild,v 1.2 2011/03/22 23:58:03 scarabeus Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-video/mplayer/mplayer-1.0_rc4_p20111215.ebuild,v 1.4 2011/12/22 13:26:21 aballier Exp $
 
 EAPI=4
 
-EGIT_REPO_URI="git://git.libav.org/libav.git"
-EGIT_PROJECT="ffmpeg"
+EGIT_REPO_URI="git://git.videolan.org/ffmpeg.git"
 ESVN_REPO_URI="svn://svn.mplayerhq.hu/mplayer/trunk"
-[[ ${PV} = *9999* ]] && SVN_ECLASS="subversion git" || SVN_ECLASS=""
+[[ ${PV} = *9999* ]] && SVN_ECLASS="subversion git-2" || SVN_ECLASS=""
 
 inherit toolchain-funcs eutils flag-o-matic multilib base ${SVN_ECLASS}
 
 # BUMP ME PLZ, NO COOKIES OTHERWISE
-[[ ${PV} != *9999* ]] && MPLAYER_REVISION=SVN-r33094
+[[ ${PV} != *9999* ]] && MPLAYER_REVISION=SVN-r34445
 
 IUSE="3dnow 3dnowext +a52 aalib +alsa altivec aqua +ass +autosub bidi bindist bl bluray
-bs2b cddb +cdio cdparanoia cpudetection custom-cpuopts debug dga +dirac
-directfb doc +dts +dv dvb +dvd +dvdnav dxr3 +enca +encode esd +faac +faad fbcon
+bs2b cddb +cdio cdparanoia cpudetection custom-cpuopts debug dga
+directfb doc +dts +dv dvb +dvd +dvdnav dxr3 +enca +encode esd faac +faad fbcon
 ftp gif ggi gsm +iconv ipv6 jack joystick jpeg jpeg2k kernel_linux ladspa
 libcaca libmpeg2 lirc +live lzo mad md5sum +mmx mmxext mng +mp3 mpg123 nas
-+network nut openal amr +opengl +osdmenu oss png pnm pulseaudio pvr +quicktime
-radio +rar +real +rtc rtmp samba +shm +schroedinger sdl +speex sse sse2 ssse3
-tga +theora +tremor +truetype +toolame +twolame +unicode v4l v4l2 vdpau vidix
-+vorbis vpx win32codecs +X +x264 xanim xinerama +xscreensaver +xv +xvid xvmc
++network nut openal +opengl +osdmenu oss png pnm pulseaudio pvr +quicktime
+radio +rar +real +rtc rtmp samba +shm sdl +speex sse sse2 ssse3
+tga +theora +tremor +truetype +toolame +twolame +unicode v4l vdpau vidix
++vorbis win32codecs +X +x264 xanim xinerama +xscreensaver +xv +xvid xvmc
 zoran"
-[[ ${PV} == *9999* ]] && IUSE+=" external-ffmpeg"
 
 VIDEO_CARDS="s3virge mga tdfx vesa"
 for x in ${VIDEO_CARDS}; do
@@ -39,8 +37,7 @@ FONT_URI="
 if [[ ${PV} == *9999* ]]; then
 	RELEASE_URI=""
 else
-	RELEASE_URI="http://dev.gentoo.org/~scarabeus/${P}.tar.xz
-		mirror://gentoo/${P}.tar.xz"
+	RELEASE_URI="mirror://gentoo/${P}.tar.xz"
 fi
 SRC_URI="${RELEASE_URI}
 	!truetype? ( ${FONT_URI} )"
@@ -57,13 +54,13 @@ X_RDEPS="
 	x11-libs/libXext
 	x11-libs/libXxf86vm
 "
-[[ ${PV} == *9999* ]] && RDEPEND+=" external-ffmpeg? ( media-video/ffmpeg )"
 # Rar: althrought -gpl version is nice, it cant do most functions normal rars can
 #	nemesi? ( net-libs/libnemesi )
 RDEPEND+="
 	sys-libs/ncurses
 	app-arch/bzip2
 	sys-libs/zlib
+	>=media-video/ffmpeg-0.9
 	!bindist? (
 		x86? (
 			win32codecs? ( media-libs/win32codecs )
@@ -88,14 +85,12 @@ RDEPEND+="
 	a52? ( media-libs/a52dec )
 	aalib? ( media-libs/aalib )
 	alsa? ( media-libs/alsa-lib )
-	amr? ( !bindist? ( media-libs/opencore-amr ) )
 	ass? ( ${FONT_RDEPS} >=media-libs/libass-0.9.10[enca?] )
 	bidi? ( dev-libs/fribidi )
-	bluray? ( media-libs/libbluray )
+	bluray? ( >=media-libs/libbluray-0.2.1 )
 	bs2b? ( media-libs/libbs2b )
 	cdio? ( dev-libs/libcdio )
 	cdparanoia? ( !cdio? ( media-sound/cdparanoia ) )
-	dirac? ( media-video/dirac )
 	directfb? ( dev-libs/DirectFB )
 	dts? ( media-libs/libdca )
 	dv? ( media-libs/libdv )
@@ -144,13 +139,11 @@ RDEPEND+="
 	)
 	rtmp? ( media-video/rtmpdump )
 	samba? ( net-fs/samba )
-	schroedinger? ( media-libs/schroedinger )
 	sdl? ( media-libs/libsdl )
 	speex? ( media-libs/speex )
 	theora? ( media-libs/libtheora[encode?] )
 	truetype? ( ${FONT_RDEPS} )
 	vorbis? ( media-libs/libvorbis )
-	vpx? ( media-libs/libvpx )
 	xanim? ( media-video/xanim )
 "
 
@@ -180,12 +173,12 @@ DEPEND="${RDEPEND}
 SLOT="0"
 LICENSE="GPL-2"
 if [[ ${PV} != *9999* ]]; then
-	KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd ~amd64-linux ~x86-linux ~ppc-macos ~x64-macos ~x86-macos ~sparc-solaris ~x86-solaris"
+	KEYWORDS="~amd64 ~hppa ~x86-fbsd ~amd64-linux ~x86-linux ~ppc-macos ~x64-macos ~x86-macos ~sparc-solaris ~x86-solaris"
 else
 	KEYWORDS=""
 fi
 
-# bindist does not cope with amr codecs (#299405#c6), faac codecs are nonfree, win32codecs are nonfree
+# faac codecs are nonfree, win32codecs are nonfree
 # libcdio support: prefer libcdio over cdparanoia and don't check for cddb w/cdio
 # dvd navigation requires dvd read support
 # ass and freetype font require iconv and ass requires freetype fonts
@@ -193,9 +186,9 @@ fi
 # libvorbis require external tremor to work
 # radio requires oss or alsa backend
 # xvmc requires xvideo support
-REQUIRED_USE="bindist? ( !amr !faac !win32codecs )"
+REQUIRED_USE="bindist? ( !faac !win32codecs )"
 
-PATCHES=(
+PATCHES=( "${FILESDIR}/swedish.patch"
 )
 
 pkg_setup() {
@@ -242,7 +235,11 @@ src_unpack() {
 		subversion_src_unpack
 		cd "${WORKDIR}"
 		rm -rf "${WORKDIR}/${P}/ffmpeg/"
-		( S="${WORKDIR}/${P}/ffmpeg/" git_src_unpack )
+		( S="${WORKDIR}/${P}/ffmpeg/" git-2_src_unpack )
+		cd "${S}"
+		cp "${FILESDIR}/dump_ffmpeg.sh" . || die
+		chmod +x dump_ffmpeg.sh
+		./dump_ffmpeg.sh || die
 	else
 		unpack ${A}
 	fi
@@ -371,12 +368,13 @@ src_configure() {
 	myconf+=" --disable-tv-bsdbt848"
 	# broken upstream, won't work with recent kernels
 	myconf+=" --disable-ivtv"
-	if { use dvb || use v4l || use v4l2 || use pvr || use radio; }; then
+	# gone since linux-headers-2.6.38
+	myconf+=" --disable-tv-v4l1"
+	if { use dvb || use v4l || use pvr || use radio; }; then
 		use dvb || myconf+=" --disable-dvb"
 		use pvr || myconf+=" --disable-pvr"
-		use v4l || myconf+=" --disable-tv-v4l1"
-		use v4l2 || myconf+=" --disable-tv-v4l2"
-		if use radio && { use dvb || use v4l || use v4l2; }; then
+		use v4l || myconf+=" --disable-tv-v4l2"
+		if use radio && { use dvb || use v4l; }; then
 			myconf+="
 				--enable-radio
 				$(use_enable encode radio-capture)
@@ -390,7 +388,6 @@ src_configure() {
 	else
 		myconf+="
 			--disable-tv
-			--disable-tv-v4l1
 			--disable-tv-v4l2
 			--disable-radio
 			--disable-radio-v4l2
@@ -405,12 +402,10 @@ src_configure() {
 	##########
 	myconf+=" --disable-musepack" # Use internal musepack codecs for SV7 and SV8 support
 	myconf+=" --disable-libmpeg2-internal" # always use system media-libs/libmpeg2
-	use dirac || myconf+=" --disable-libdirac-lavc"
 	use dts || myconf+=" --disable-libdca"
 	if ! use mp3; then
 		myconf+="
 			--disable-mp3lame
-			--disable-mp3lame-lavc
 			--disable-mp3lib
 		"
 	fi
@@ -418,8 +413,6 @@ src_configure() {
 	for i in ${uses}; do
 		use ${i} || myconf+=" --disable-lib${i}"
 	done
-	use schroedinger || myconf+=" --disable-libschroedinger-lavc"
-	use amr || myconf+=" --disable-libopencore_amrnb --disable-libopencore_amrwb"
 
 	uses="faad gif jpeg libmpeg2 live mad mng mpg123 png pnm speex tga theora xanim"
 	for i in ${uses}; do
@@ -436,21 +429,18 @@ src_configure() {
 			--disable-libvorbis
 		"
 	fi
-	use vpx || myconf+=" --disable-libvpx-lavc"
 	# Encoding
 	uses="faac x264 xvid toolame twolame"
 	if use encode; then
 		for i in ${uses}; do
 			use ${i} || myconf+=" --disable-${i}"
 		done
-		use faac || myconf+=" --disable-faac-lavc"
 		if use bindist && use faac; then
 			ewarn "faac is nonfree and cannot be distributed; disabling faac support."
-			myconf+=" --disable-faac --disable-faac-lavc"
+			myconf+=" --disable-faac"
 		fi
 	else
 		myconf+=" --disable-mencoder"
-		myconf+=" --disable-faac-lavc"
 		for i in ${uses}; do
 			myconf+=" --disable-${i}"
 			use ${i} && elog "Useflag \"${i}\" require \"encode\" useflag enabled to work."
@@ -624,24 +614,17 @@ src_configure() {
 		"
 	fi
 
-	###################
-	# External FFmpeg #
-	###################
-	if [[ ${PV} == *9999* ]]; then
-		use external-ffmpeg && myconf+=" --disable-ffmpeg_a"
-	fi
-
-	myconf="--cc=$(tc-getCC)
-		--host-cc=$(tc-getBUILD_CC)
-		--prefix=${EPREFIX}/usr
-		--bindir=${EPREFIX}/usr/bin
-		--libdir=${EPREFIX}/usr/$(get_libdir)
-		--confdir=${EPREFIX}/etc/mplayer
-		--datadir=${EPREFIX}/usr/share/mplayer${namesuf}
-		--mandir=${EPREFIX}/usr/share/man
-		${myconf}"
-
-	CFLAGS="${CFLAGS}" ./configure ${myconf} || die
+	./configure \
+		--cc="$(tc-getCC)" \
+		--host-cc="$(tc-getBUILD_CC)" \
+		--prefix="${EPREFIX}/usr" \
+		--bindir="${EPREFIX}/usr/bin" \
+		--libdir="${EPREFIX}/usr/$(get_libdir)" \
+		--confdir="${EPREFIX}/etc/mplayer" \
+		--datadir="${EPREFIX}/usr/share/mplayer${namesuf}" \
+		--mandir="${EPREFIX}/usr/share/man" \
+		--disable-ffmpeg_a \
+		${myconf} || die
 }
 
 src_compile() {
@@ -653,13 +636,13 @@ src_compile() {
 		local ALLOWED_LINGUAS="cs de en es fr hu it pl ru zh_CN"
 		local BUILT_DOCS=""
 		for i in ${LINGUAS} ; do
-			hasq ${i} ${ALLOWED_LINGUAS} && BUILT_DOCS+=" ${i}"
+			has ${i} ${ALLOWED_LINGUAS} && BUILT_DOCS+=" ${i}"
 		done
 		if [[ -z $BUILT_DOCS ]]; then
-			emake -j1 -C DOCS/xml html-chunked
+			emake -j1 html-chunked
 		else
 			for i in ${BUILT_DOCS}; do
-				emake -j1 -C DOCS/xml html-chunked-${i}
+				emake -j1 html-chunked-${i}
 			done
 		fi
 	fi
