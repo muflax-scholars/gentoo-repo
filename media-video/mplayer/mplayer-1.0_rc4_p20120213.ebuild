@@ -1,6 +1,6 @@
 # Copyright 1999-2012 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-video/mplayer/mplayer-1.0_rc4_p20120105.ebuild,v 1.1 2012/01/05 14:13:46 aballier Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-video/mplayer/mplayer-1.0_rc4_p20120213.ebuild,v 1.2 2012/02/15 18:10:01 hd_brummy Exp $
 
 EAPI=4
 
@@ -57,7 +57,7 @@ RDEPEND+="
 	sys-libs/ncurses
 	app-arch/bzip2
 	sys-libs/zlib
-	>=media-video/ffmpeg-0.9.1
+	>=media-video/ffmpeg-0.10
 	!bindist? (
 		x86? (
 			win32codecs? ( media-libs/win32codecs )
@@ -76,7 +76,7 @@ RDEPEND+="
 	directfb? ( dev-libs/DirectFB )
 	dts? ( media-libs/libdca )
 	dv? ( media-libs/libdv )
-	dvb? ( media-tv/linuxtv-dvb-headers )
+	dvb? ( virtual/linuxtv-dvb-headers )
 	dvd? ( >=media-libs/libdvdread-4.1.3 )
 	dvdnav? ( >=media-libs/libdvdnav-4.1.3 )
 	encode? (
@@ -159,7 +159,7 @@ DEPEND="${RDEPEND}
 SLOT="0"
 LICENSE="GPL-2"
 if [[ ${PV} != *9999* ]]; then
-	KEYWORDS="~amd64 ~hppa ~x86-fbsd ~amd64-linux ~x86-linux ~ppc-macos ~x64-macos ~x86-macos ~sparc-solaris ~x86-solaris"
+	KEYWORDS="~amd64 ~hppa ~x86 ~x86-fbsd ~amd64-linux ~x86-linux ~ppc-macos ~x64-macos ~x86-macos ~sparc-solaris ~x86-solaris"
 else
 	KEYWORDS=""
 fi
@@ -187,6 +187,8 @@ REQUIRED_USE="bindist? ( !faac !win32codecs )
 	xscreensaver? ( X )
 	xv? ( X )
 	xvmc? ( xv )"
+
+PATCHES=( "${FILESDIR}/ffmpeg.patch" )
 
 pkg_setup() {
 	if [[ ${PV} == *9999* ]]; then
