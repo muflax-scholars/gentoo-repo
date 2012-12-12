@@ -4,6 +4,8 @@
 
 EAPI=4
 
+inherit eutils
+
 DESCRIPTION="libpurple twitter protocol"
 HOMEPAGE="https://code.google.com/p/prpltwtr/"
 SRC_URI="http://${PN}.googlecode.com/files/${P}.tar.gz"
@@ -16,3 +18,7 @@ IUSE=""
 DEPEND="${RDEPEND}
 		virtual/pkgconfig"
 RDEPEND=">=net-im/pidgin-2.6"
+
+src_prepare() {
+  epatch ${FILESDIR}/replies.patch || die "patch failed"
+}
