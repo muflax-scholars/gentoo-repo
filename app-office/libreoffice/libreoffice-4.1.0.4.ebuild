@@ -231,6 +231,7 @@ PATCHES=(
 	# not upstreamable stuff
 	"${FILESDIR}/${PN}-3.7-system-pyuno.patch"
 	"${FILESDIR}/${PN}-4.1.0.4-neon_remove_SSPI_support.patch"
+	"${FILESDIR}/${PN}-4.1.0.4-jpeg-9-fix.patch"
 )
 
 REQUIRED_USE="
