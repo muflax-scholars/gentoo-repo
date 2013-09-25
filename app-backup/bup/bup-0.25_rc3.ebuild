@@ -7,7 +7,7 @@ inherit eutils
 
 DESCRIPTION="It backs things up based on the git packfile format"
 HOMEPAGE="http://github.com/bup/#{PN}"
-SRC_URI="https://github.com/bup/${PN}/tarball/${P/_/-} -> ${P}.tar.gz"
+SRC_URI="https://github.com/bup/${PN}/archive/${PV/_/-}.tar.gz"
 
 LICENSE="LGPL-2"
 SLOT="0"
