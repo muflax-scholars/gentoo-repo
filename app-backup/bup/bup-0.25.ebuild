@@ -12,44 +12,26 @@ SRC_URI="http://github.com/bup/bup/archive/${PV/_/-}.tar.gz -> ${P}.tar.gz"
 LICENSE="LGPL-2"
 SLOT="0"
 KEYWORDS="~amd64"
-IUSE="+doc"
+IUSE="+acl +attr +doc +fuse +parity"
 
-DEPEND="|| (
-			dev-lang/python:2.4
-			dev-lang/python:2.5
-			dev-lang/python:2.6
-			dev-lang/python:2.7
-		)
-		dev-vcs/git
-		app-arch/par2cmdline
-		dev-python/fuse-python
-		dev-python/pyxattr
-		dev-python/pylibacl
-		doc? ( app-text/pandoc )"
+DEPEND=">=dev-lang/python-2.4
+		>=dev-vcs/git-1.5.3.1
+		attr? ( dev-python/pyxattr )
+		acl? ( dev-python/pylibacl )
+		fuse? ( dev-python/fuse-python )
+		doc? ( app-text/pandoc )
+		parity? ( app-arch/par2cmdline )"
+
 RDEPEND="${DEPEND}"
 
+DOCS="README CODINGSTYLE DESIGN"
+S=${WORKDIR}/${PN}
+
 src_unpack() {
-	unpack ${A}
-	mv -v * "${S}" || die
+  unpack "${A}"
+  mv ${PN}-* "${S}"
 }
 
 src_configure() {
-	echo "Nothing to configure..."
-}
-
-src_compile() {
-	emake CFLAGS="${CFLAGS}" LDFLAGS="${LDFLAGS}"
-}
-
-src_install() {
-	emake install DESTDIR="${D}"
-
-	dodoc "${D}/usr/share/doc/${PN}"/*
-	rm -r "${D}/usr/share/doc/${PN}/" || die
-
-	dodoc README README.md DESIGN
-}
-
-src_test() {
-	emake test
+  true
 }
