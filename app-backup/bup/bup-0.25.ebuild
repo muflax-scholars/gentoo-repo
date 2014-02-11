@@ -12,7 +12,7 @@ SRC_URI="http://github.com/bup/bup/archive/${PV/_/-}.tar.gz -> ${P}.tar.gz"
 LICENSE="LGPL-2"
 SLOT="0"
 KEYWORDS="~amd64"
-IUSE="+acl +attr +doc +fuse +parity"
+IUSE="+acl +attr doc +fuse +parity"
 
 DEPEND=">=dev-lang/python-2.4
 		>=dev-vcs/git-1.5.3.1
