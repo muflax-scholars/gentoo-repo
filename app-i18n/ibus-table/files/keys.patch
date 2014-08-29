@@ -2,15 +2,63 @@ diff --git a/engine/tabdict.py b/engine/tabdict.py
 index 368734d..90f1975 100644
 --- a/engine/tabdict.py
 +++ b/engine/tabdict.py
-@@ -45,5 +45,8 @@ tab_dict = {
+@@ -45,5 +45,6 @@
      'R':76, 'S':77, 'T':78, 'U':79, 'V':80,
      'W':81, 'X':82, 'Y':83, 'Z':84, '0':85,
      '1':86, '2':87, '3':88, '4':89, '5':90,
 -    '6':91, '7':92, '8':93, '9':94
 +    '6':91, '7':92, '8':93, '9':94,
-+    u"ß":95, u"ẞ":96, u"ł":97, u"Ł":98,
-+    u"ö":99, u"Ö":100, u"ü":101, u"Ü":102, u"ä":103, u"Ä":104,
-+    u"̈":105
++    u"ß":95, u"ẞ":96, u"·":97
      }
 
  tab_key_list = tab_dict.keys()
+--- a/engine/table.py	2011-08-26 17:10:09.000000000 +0100
++++ b/engine/table.py	2014-08-29 12:20:04.301285993 +0100
+@@ -1256,20 +1256,20 @@
+ 
+     def _process_key_event (self, key):
+         '''Internal method to process key event'''
+         # Match mode switch hotkey
+-        if not self._editor._t_chars and ( self._match_hotkey (key, keysyms.Shift_L, modifier.SHIFT_MASK + modifier.RELEASE_MASK)):
+-            self._change_mode ()
+-            return True
++        # if not self._editor._t_chars and ( self._match_hotkey (key, keysyms.Shift_L, modifier.SHIFT_MASK + modifier.RELEASE_MASK)):
++        #     self._change_mode ()
++        #     return True
+ 
+         # Match full half letter mode switch hotkey
+-        if self._match_hotkey (key, keysyms.space, modifier.SHIFT_MASK):
+-            self.property_activate ("letter")
+-            return True
++        # if self._match_hotkey (key, keysyms.space, modifier.SHIFT_MASK):
++        #     self.property_activate ("letter")
++        #     return True
+         
+         # Match full half punct mode switch hotkey
+-        if self._match_hotkey (key, keysyms.period, modifier.CONTROL_MASK):
+-            self.property_activate ("punct")
+-            return True
++        # if self._match_hotkey (key, keysyms.period, modifier.CONTROL_MASK):
++        #     self.property_activate ("punct")
++        #     return True
+         
+         # we ignore all hotkeys
+ #        if key.mask & modifier.ALT_MASK:
+@@ -1364,7 +1367,7 @@
+ 
+         if self._editor.is_empty ():
+             # we have not input anything
+-            if key.code <= 127 and ( unichr(key.code) not in self._valid_input_chars ) \
++            if key.code <= 255 and ( unichr(key.code) not in self._valid_input_chars ) \
+                     and (not key.mask & modifier.ALT_MASK + modifier.CONTROL_MASK):
+                 if key.code == keysyms.space:
+                     self.commit_string (cond_letter_translate (unichr (key.code)))
+@@ -1375,7 +1378,7 @@
+                 if ascii.isdigit (key.code):
+                     self.commit_string (cond_letter_translate (unichr (key.code)))
+                     return True
+-            elif key.code > 127 and (not self._editor._py_mode):
++            elif key.code > 256 and (not self._editor._py_mode):
+                 return False
+ 
+         if key.code == keysyms.Escape:
