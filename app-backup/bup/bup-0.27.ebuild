@@ -2,8 +2,12 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-EAPI=4
+EAPI=5
 inherit eutils
+
+PYTHON_COMPAT=( python2_5 python2_6 python2_7 )
+
+inherit python-single-r1
 
 DESCRIPTION="It backs things up based on the git packfile format"
 HOMEPAGE="http://github.com/bup/bup"
@@ -14,7 +18,8 @@ SLOT="0"
 KEYWORDS="~amd64"
 IUSE="+acl +attr doc +fuse +parity"
 
-DEPEND=">=dev-lang/python-2.4
+DEPEND="
+		${PYTHON_DEPS}
 		>=dev-vcs/git-1.5.3.1
 		attr? ( dev-python/pyxattr )
 		acl? ( dev-python/pylibacl )
@@ -32,6 +37,19 @@ src_unpack() {
   mv ${PN}-* "${S}"
 }
 
+
 src_configure() {
-  true
+	true
+}
+
+src_compile() {
+	emake CFLAGS="${CFLAGS}" LDFLAGS="${LDFLAGS}"
+}
+
+src_install() {
+	emake install DESTDIR="${D}"
+	python_fix_shebang "${ED}"usr/bin
+	python_fix_shebang "${ED}"usr/lib/bup/cmd
+
+	dodoc README DESIGN CODINGSTYLE
 }
