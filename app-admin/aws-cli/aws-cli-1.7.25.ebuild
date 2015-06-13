@@ -25,9 +25,11 @@ DEPEND="${RDEPEND}
 	test? ( dev-python/nose[${PYTHON_USEDEP}] )"
 
 src_prepare() {
-	# Unbundled requests in dev-python/botocore
+	# unbundle vendored tools
 	grep -rl 'botocore.vendored' | xargs \
-		sed -i -e "/import requests/s/from botocore.vendored //" \
+		sed -i \
+		-e "/import requests/s/from botocore.vendored //" \
+		-e "/import six/s/from botocore.vendored //" \
 		-e "/^from/s/botocore.vendored.//" \
 		-e "s/'botocore.vendored./'/" \
 		|| die "sed failed"
